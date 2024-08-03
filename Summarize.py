@@ -10,7 +10,7 @@ import time
 def Summarize(pdf_file_name):
     # Retrieve Key
     OPENAI_API_KEY = ''
-    with open('/Users/trongphan/Desktop/hoho/OpenAI.json', 'r') as file_to_read:
+    with open('OpenAI.json', 'r') as file_to_read:
         json_data = json.load(file_to_read)
         OPENAI_API_KEY = json_data["OPENAI_API_KEY"]
 
@@ -18,7 +18,7 @@ def Summarize(pdf_file_name):
 
     # Get docs file
     # Remember to channge the directory
-    doc = fitz.open('your directory' + pdf_file_name + '.pdf')
+    doc = fitz.open('pdf_folder' + pdf_file_name + '.pdf')
 
     # Get summarization text list
     summary_list = []
@@ -28,14 +28,17 @@ def Summarize(pdf_file_name):
         text = page.get_text("text")
         prompt = ("Summarize " + pdf_file_name +
                   " by Introduction " + text)
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=prompt,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                    {   "role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+            ],
             temperature=0.7,
             max_tokens=120,
             top_p=0.9,
             frequency_penalty=0.0,
-            presence_penalty=1
+            presence_penalty=1.0
         )
         summary_list.append(response["choices"][0]["text"])
         
@@ -80,15 +83,20 @@ def main():
         "Type something you want to ask about this paper summarization:")
     if s:
         prompt = s + " " + summary_text
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=prompt,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                    {   "role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+            ],
             temperature=0.7,
-            max_tokens=400,
+            max_tokens=120,
             top_p=0.9,
             frequency_penalty=0.0,
-            presence_penalty=1
+            presence_penalty=1.0
         )
+        summary_list.append(response["choices"][0]["message"]["content"])
+
         st.write(response["choices"][0]["text"])
 
 

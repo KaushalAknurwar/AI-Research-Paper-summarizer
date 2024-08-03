@@ -1,5 +1,5 @@
 import streamlit as st
-from pathlib import Path
+from pathlib import *
 
 
 st.title("Demo")

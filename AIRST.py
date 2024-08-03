@@ -1,8 +1,8 @@
 import streamlit as st
-from pages.Search_for_papers import Search_for_papers
-#from pages.Upload import Upload
-from pages.Summarize import Summarize
-from pages.Ask_Everything import Ask_Everything
+from pages.Search_for_papers import *
+#from pages.Upload import *
+from pages.Summarize import *
+from pages.Ask_Everything import *
 
 # Create a Streamlit app with sidebar
 
